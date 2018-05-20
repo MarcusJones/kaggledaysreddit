@@ -1,0 +1,7 @@
+Feature engineering: Re-create the tree structure of Reddit. Each response to a post has further sub-responses, these are predictive of score. 
+
+Can create a notepad to python script conversion program
+
+Jupyter Notebook format <-> Spyder conversion
+
+
