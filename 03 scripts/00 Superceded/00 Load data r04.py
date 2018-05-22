@@ -3,22 +3,16 @@
 #import urllib as urllib
 import os
 import datetime
+from ExergyUtilities import util_spyder
+
 #import logging
 FORMAT = '%(asctime)-15s %(clientip)s %(user)-8s %(message)s'
 #logging.basicConfig(format=FORMAT,level=logging.DEBUG)
 #logging.debug("Test")
-class SpyderLog:
-    def __init__(self,this_format):
-        self.this_format = this_format
-    def debug(self,msg):
-        print(self.time, msg)
-    def info(self,msg):
-        print(self.time, msg)
-    @property
-    def time(self):
-        return datetime.datetime.now().strftime('%H:%M:%S')
-logging = SpyderLog(FORMAT)
+
+logging = util_spyder.SpyderLog(FORMAT)
 logging.info("Started logging")
+
 #### External imports - reimported for code completion! 
 print_imports()
 import pandas as pd # Import again for code completion
@@ -40,8 +34,8 @@ np.random.seed(42)
 #%% ===========================================================================
 #  Data source and paths
 # =============================================================================
-PATH_DATA_ROOT = r"/home/batman/git/kaggledaysreddit"
-path_data = os.path.join(PATH_DATA_ROOT, r"01 data")
+PATH_DATA_ROOT = r"/home/batman/Dropbox/DATA/KaggleDays Reddit"
+path_data = os.path.join(PATH_DATA_ROOT, r"")
 assert os.path.exists(path_data), path_data
 
 #%% ===========================================================================
@@ -57,24 +51,38 @@ logging.info(f"Loaded {len(data_test)} test rows")
 
 #%% SUBSET; 2 subreddits
 
+# The category column
 r = data_train['subreddit'] == selection[0]
-selection = ['movies','gaming']
-this_train_filter = np.full(data_train.shape[0],False)
-for subred in selection:
-    selected_train_rows = (data_train['subreddit'] == subred).values
-    this_train_filter = this_train_filter | selected_train_rows
-    selected_test_rows = (data_train['subreddit'] == subred).values
-    this_train_filter = data_test | data_train['subreddit'] == subred
-    
-this_train_filter = () | (data_train['subreddit'] == selection[1] )
-this_test_filter = (data_test['subreddit'] == selection[0]) | (data_test['subreddit'] == selection[1] )
-logging.info(sum(this_train_filter))
-logging.info(sum(this_test_filter))
 
-# Create subset 
-X_train = X_train[this_train_filter]
-y_train = y_train[this_train_filter]
-X_test = X_test[this_test_filter]
+# Select a list of categories
+selection = ['movies','gaming']
+
+# Empty masks
+this_train_filter = np.full(data_train.shape[0],False)
+this_test_filter = np.full(data_test.shape[0],False)
+for this_category in selection:
+    # Concantenate for train
+    selected_train_rows = data_train['subreddit'].values == this_category
+    this_train_filter = this_train_filter | selected_train_rows
+    # Concantenate for test
+    selected_test_rows = data_test['subreddit'].values == this_category
+    this_test_filter = this_test_filter | selected_test_rows
+    logging.info(f"({np.sum(selected_train_rows)} {np.sum(selected_test_rows)}) (train, test) matches for category: {this_category}")
+
+logging.info(f"{np.sum(this_train_filter)} selected for train")
+logging.info(f"{np.sum(this_test_filter)} selected for test")
+#
+#
+#
+#this_train_filter = () | (data_train['subreddit'] == selection[1] )
+#this_test_filter = (data_test['subreddit'] == selection[0]) | (data_test['subreddit'] == selection[1] )
+#logging.info(sum(this_train_filter))
+#logging.info(sum(this_test_filter))
+#
+## Create subset 
+#X_train = X_train[this_train_filter]
+#y_train = y_train[this_train_filter]
+#X_test = X_test[this_test_filter]
 #y_test = y_test[this_test_filter]
 #res = dftr['question_text'].apply(lambda x: x.slice(0, 20))
 

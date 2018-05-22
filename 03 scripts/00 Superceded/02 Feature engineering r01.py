@@ -42,39 +42,9 @@ test_df = X_test
 #del X_train,X_test
 
 
-
-
-#%% DATE TIME conversion
-
-#dftrall['question_utc']
-data_train['question_utc'] = pd.to_datetime(data_train['question_utc'], unit='s')
-data_train['answer_utc'] = pd.to_datetime(data_train['answer_utc'], unit='s')
-data_test['question_utc'] = pd.to_datetime(data_test['question_utc'], unit='s')
-data_test['answer_utc'] = pd.to_datetime(data_test['answer_utc'], unit='s')
-
-
-
-
 #%%********************************************
 # Transformers!
 #**********************************************
-#%% 
-class ValueCounter(sk.base.BaseEstimator, sk.base.TransformerMixin):
-    """
-    """
-    def __init__(self, col_name):
-        self.col_name = col_name
-        
-    def fit(self, X, y=None):
-        return self
-    
-    def transform(self, df, y=None):
-        # Count the number of unique entries in a column
-        # reset_index() is used to maintain the DataFrame for merging
-        selected_df_col = df[self.col_name].value_counts().reset_index()
-        # Create a new name for this column
-        selected_df_col.columns = [self.col_name, self.col_name +'_counts']
-        return pd.merge(selected_df_col, df, on=self.col_name)
 
 #%% 
 class WordCounter(sk.base.BaseEstimator, sk.base.TransformerMixin):
@@ -112,16 +82,19 @@ class TimeProperty(sk.base.BaseEstimator, sk.base.TransformerMixin):
         return self
     
     def transform(self, df, y=None):
+        original_shape=df.shape
         if self.time_property == 'hour':
             df[self.new_col_name] = df[self.time_col_name].dt.hour
         elif self.time_property == 'month':
-            df[self.new_col_name] = train_df.question_utc.dt.month
+            df[self.new_col_name] = df[self.time_col_name].dt.month
         elif self.time_property == 'dayofweek':
-            df[self.new_col_name] = train_df.question_utc.dt.dayofweek
+            df[self.new_col_name] = df[self.time_col_name].dayofweek
         else:
             raise
+        print("Transformer:", type(self).__name__, original_shape, "->", df.shape)
+        print("\t",vars(self))
         return df
-           
+
     
 # Debug:
 #df = X_train
