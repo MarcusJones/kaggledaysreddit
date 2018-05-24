@@ -1,9 +1,30 @@
 #### Standard imports
 import os
 from ExergyUtilities import util_spyder
-
+import yaml
 #### Logging (broken for Spyder, so using a wrapper)
-#import logging
+import logging.config
+ABSOLUTE_LOGGING_PATH = r"/home/batman/git/py_ExergyUtilities/LoggingConfig/loggingNoFile.yaml"
+#FILE_CONSOLE_LOGGING_PATH = r"/home/batman/git/py_ExergyUtilities/LoggingConfig/loggingWithFile.yaml"
+#print(ABSOLUTE_LOGGING_PATH)
+log_config = yaml.load(open(ABSOLUTE_LOGGING_PATH, 'r'))
+logging.config.dictConfig(log_config)
+#this_logging_path = os.path.join(os.getcwd(),'/log.txt')
+fh = logging.FileHandler(filename=os.path.join(os.getcwd(), 'log.txt'))
+fh.setLevel('DEBUG')
+logformat = logging.Formatter("%(asctime)s - %(levelno)-3s - %(module)-20s  %(funcName)-30s: %(message)s")
+fh.setFormatter(logformat)
+
+#fh = logging.FileHandler(filename=os.path.join(this_logging_path, 'log.txt'))
+#fh.setLevel('DEBUG')
+#fh = logging.FileHandler(filename=os.path.join(this_logging_path, 'log.txt'))
+#%%
+logging.debug("TEST1")
+
+
+#%%
+
+
 FORMAT = '%(asctime)-15s %(clientip)s %(user)-8s %(message)s'
 #logging.basicConfig(format=FORMAT,level=logging.DEBUG)
 #logging.debug("Test")
