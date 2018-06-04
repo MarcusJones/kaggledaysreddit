@@ -1,28 +1,8 @@
-# =============================================================================
-# Standard imports
-# =============================================================================
 
 # =============================================================================
 # External imports - reimported for code completion! 
 # =============================================================================
 from ExergyUtilities import util_sk_transformers as trn
-
-print_imports()
-import pandas as pd # Import again for code completion
-import numpy as np # Import again for code completion
-import matplotlib as mpl
-import matplotlib.pyplot as plt
-import sklearn as sk
-import numpy as np
-
-# Plotly
-import plotly.plotly as py
-py.plotly.tools.set_credentials_file(username='notbatman', api_key='1hy2cho61mYO4ly5R9Za')
-import plotly.graph_objs as go
-
-sns.set_style("whitegrid")
-
-logging.info("Started logging")
 
 #%% DATE TIME conversion
 Xy_tr = trn.ConvertToDatetime('question_utc').transform(Xy_tr)
@@ -40,6 +20,6 @@ count_uniques = Xy_tr.groupby('subreddit').nunique()
 
 
 #%%
-Xy_tr.hist()
+#Xy_tr.hist()
 
 

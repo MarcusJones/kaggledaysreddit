@@ -5,15 +5,14 @@
 # =============================================================================
 # External imports - reimported for code completion! 
 # =============================================================================
-print_imports()
-import pandas as pd # Import again for code completion
-import numpy as np # Import again for code completion
-import matplotlib as mpl
-import matplotlib.pyplot as plt
+#print_imports()
+#import pandas as pd # Import again for code completion
+#import numpy as np # Import again for code completion
+#import matplotlib as mpl
+#import matplotlib.pyplot as plt
 import sklearn as sk
-import sklearn
-from ExergyUtilities import util_sk_transformers as trn
-
+#import sklearn
+#from ExergyUtilities import util_sk_transformers as trn
 from sklearn import pipeline
     
 #%%********************************************
@@ -31,6 +30,7 @@ feature_adding_pipeline = sk.pipeline.Pipeline([
         ('Answer delay seconds', trn.AnswerDelay('answer_delay_seconds',divisor=1)),
         ])
 
+logging.info("Applying pipeline:")
 for i,step in enumerate(feature_adding_pipeline.steps):
     print(i,step)
 
